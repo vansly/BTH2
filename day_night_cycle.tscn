@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dh4hqy0wyvo4"]
+
+[ext_resource type="Script" uid="uid://bj0uxgbnu6d81" path="res://day_night_cycle.gd" id="2_aipo0"]
+[ext_resource type="Material" uid="uid://wyikf3yxoy6x" path="res://addons/DayNightCycle/Sky_Day.tres" id="2_skyday"]
+
+[sub_resource type="Sky" id="Sky_ccdjs"]
+sky_material = ExtResource("2_skyday")
+
+[sub_resource type="Environment" id="Environment_imw6s"]
+background_mode = 2
+sky = SubResource("Sky_ccdjs")
+
+[node name="DayNightCycle" type="Node3D" unique_id=1999871990]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=807278066]
+environment = SubResource("Environment_imw6s")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=722744487 node_paths=PackedStringArray("night_light", "world_environment")]
+transform = Transform3D(1, 0, 0, 0, 0.8517269, -0.5239857, 0, 0.5239857, 0.8517269, 0, 0, 0)
+light_energy = 0.0004635982
+shadow_enabled = true
+script = ExtResource("2_aipo0")
+speed_multiplier = 1440.0
+seconds_per_minute = 60.0
+night_light = NodePath("Moon")
+world_environment = NodePath("../WorldEnvironment")
+sunsetColor = Color(1, 0.39, 0.7051668, 1)
+
+[node name="Moon" type="DirectionalLight3D" parent="Sun" unique_id=492396007]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+light_energy = 0.09995366

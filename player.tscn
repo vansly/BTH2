@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dmru6t0dtbadh"]
+
+[ext_resource type="Script" uid="uid://csrk8w2bh20o4" path="res://scenes/player/player.gd" id="1_i3pqv"]
+[ext_resource type="Texture2D" uid="uid://cwkkl08airpta" path="res://assets/foxy/fox_hat/foxy_hat_sprite_sheet.png" id="2_onrkg"]
+[ext_resource type="AnimationLibrary" uid="uid://bxn6hb7ky7gfi" path="res://scenes/player/player_anims.tres" id="3_i3pqv"]
+[ext_resource type="Script" uid="uid://bytwgpxy1wbb3" path="res://scenes/player/states/idle.gd" id="4_1jxqw"]
+[ext_resource type="Script" uid="uid://kx1fr4p8vy0f" path="res://scenes/player/states/run.gd" id="5_dw050"]
+[ext_resource type="Script" uid="uid://dpcr7kcoh7xdh" path="res://scenes/player/states/jump.gd" id="6_b26j0"]
+[ext_resource type="Script" uid="uid://cqn00yvsknulb" path="res://scenes/player/states/fall.gd" id="7_n7ghd"]
+[ext_resource type="Script" uid="uid://cnabs2tfmi6sd" path="res://scenes/player/states/wall_jump.gd" id="8_wjump"]
+[ext_resource type="Script" uid="uid://cw2qfteup3uvg" path="res://scenes/player/states/wall_climb.gd" id="9_wclimb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kthxi"]
+margin = 0.0
+height = 1.99
+
+[node name="Player" type="CharacterBody3D" unique_id=262321180]
+script = ExtResource("1_i3pqv")
+on_ground_move_speed = 8.0
+on_ground_time_to_peak = 0.3
+on_ground_time_to_stop = 0.1
+on_air_move_speed = 6.0
+on_air_time_to_peak = 0.3
+on_air_time_to_stop = 0.1
+jump_height = 5.0
+jump_time_to_peak = 0.3
+jump_time_to_descend = 0.5
+metadata/_custom_type_script = "uid://clw03abs2j8ss"
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=86995493]
+offset = Vector2(0, 22)
+pixel_size = 0.0625
+billboard = 1
+shaded = true
+alpha_cut = 1
+texture_filter = 0
+texture = ExtResource("2_onrkg")
+hframes = 4
+vframes = 15
+frame = 16
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=734667495]
+libraries/ = ExtResource("3_i3pqv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=450378845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_kthxi")
+
+[node name="States" type="Node" parent="." unique_id=560559864]
+
+[node name="Idle" type="Node" parent="States" unique_id=1277088551]
+script = ExtResource("4_1jxqw")
+
+[node name="Run" type="Node" parent="States" unique_id=1293724293]
+script = ExtResource("5_dw050")
+
+[node name="Jump" type="Node" parent="States" unique_id=1647799038]
+script = ExtResource("6_b26j0")
+
+[node name="Fall" type="Node" parent="States" unique_id=1243808473]
+script = ExtResource("7_n7ghd")
+
+[node name="CoyoteTimer" type="Timer" parent="States/Fall" unique_id=1178171097]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
+[node name="WallJump" type="Node" parent="States" unique_id=229229678]
+script = ExtResource("8_wjump")
+
+[node name="WallClimb" type="Node" parent="States" unique_id=1597917284]
+script = ExtResource("9_wclimb")
+
+[connection signal="timeout" from="States/Fall/CoyoteTimer" to="States/Fall" method="_on_coyote_timer_timeout"]
